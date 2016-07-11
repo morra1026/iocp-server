@@ -7,11 +7,11 @@
 *.db
 *.filters
 *.user
+*.ipch
 /Debug
 /Release
 /IocpServer/Debug
 /IocpServer/Release
 /TestServer/Debug
 /TestServer/Release
-*.ipch
 *.opendb
