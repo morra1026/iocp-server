@@ -10,52 +10,59 @@
 #include "IocpContext.h"
 #include "../ConnectionInformation.h"
 
-namespace iocp { class CIocpHandler; }
-
-namespace iocp { namespace detail {
-
-class CSharedIocpData : boost::noncopyable
+namespace iocp
 {
-public:
-	CSharedIocpData() 
-		: m_shutdownEvent(INVALID_HANDLE_VALUE)
-		, m_ioCompletionPort(INVALID_HANDLE_VALUE)
-		, m_listenSocket(INVALID_SOCKET)
-		, m_acceptContext(INVALID_SOCKET, 0, CIocpContext::Accept, 4096)
-		, m_rcvBufferSize(0)
-		, m_currentId(0)
-		, m_acceptExFn(NULL)
+	class CIocpHandler;
+}
 
+namespace iocp
+{
+	namespace detail
 	{
 
-	}
-
-
-	LONGLONG GetNextId()
-	{
+		class CSharedIocpData : boost::noncopyable
 		{
-			mutex::scoped_lock l(m_cidMutex);
-			++m_currentId;
-		}
+		public:
+			CSharedIocpData()
+				: m_shutdownEvent(INVALID_HANDLE_VALUE)
+				, m_ioCompletionPort(INVALID_HANDLE_VALUE)
+				, m_listenSocket(INVALID_SOCKET)
+				, m_acceptContext(INVALID_SOCKET, 0, CIocpContext::Accept, 4096)
+				, m_rcvBufferSize(0)
+				, m_currentId(0)
+				, m_acceptExFn(NULL)
 
-		return m_currentId;
+			{
+
+			}
+
+
+			LONGLONG GetNextId()
+			{
+				{
+					mutex::scoped_lock l(m_cidMutex);
+					++m_currentId;
+				}
+
+				return m_currentId;
+			}
+
+
+			HANDLE m_shutdownEvent;
+			HANDLE m_ioCompletionPort;
+			SOCKET m_listenSocket;
+			CConnectionManager m_connectionManager;
+			shared_ptr<CIocpHandler> m_iocpHandler;
+			CIocpContext m_acceptContext;
+			uint32_t m_rcvBufferSize;
+			LPFN_ACCEPTEX m_acceptExFn;
+
+		private:
+			mutex m_cidMutex;
+			LONGLONG m_currentId;
+		};
+
 	}
-
-
-	HANDLE m_shutdownEvent;
-	HANDLE m_ioCompletionPort;
-	SOCKET m_listenSocket;
-	CConnectionManager m_connectionManager;
-	shared_ptr<CIocpHandler> m_iocpHandler;
-	CIocpContext m_acceptContext;
-	uint32_t m_rcvBufferSize;
-	LPFN_ACCEPTEX m_acceptExFn;
-
-private:
-	mutex m_cidMutex;
-	LONGLONG m_currentId;
-};
-
-} } // end namespace
+} // end namespace
 
 #endif // SHAREDIOCPDATA_H_2010_09_21_23_51_40

@@ -17,7 +17,8 @@ public:
 	// simple struct to keep track of statistics per connection
 	struct __declspec(align(64)) Statistics
 	{
-		Statistics() :m_byteActuallySent(0), m_byteTriedToSent(0), m_byteRcv(0) {}
+		Statistics() :m_byteActuallySent(0), m_byteTriedToSent(0), m_byteRcv(0)
+		{}
 		int64_t m_byteActuallySent;
 		int64_t m_byteTriedToSent;
 		int64_t m_byteRcv;
@@ -32,8 +33,7 @@ public:
 	//!
 	CEchoHandler(bool sendGracefulShutdownMessage)
 		: m_sendGracefulShutdownMessage(sendGracefulShutdownMessage)
-	{
-	}
+	{}
 
 	//! @details
 	//! New connected client. Update the statistics table.
@@ -43,9 +43,9 @@ public:
 		{
 			mutex::scoped_lock l(m_mutex);
 			tcout
-				<< "New Connection  " 
-				<< std::hex << cid 
-				<< std::dec << _T(" from ") 
+				<< "New Connection  "
+				<< std::hex << cid
+				<< std::dec << _T(" from ")
 				<< c.m_remoteHostName << _T(":") << c.m_remotePortNumber
 				<< std::endl;
 
@@ -63,7 +63,7 @@ public:
 		{
 			mutex::scoped_lock l(m_mutex);
 
-			m_statistics[cid].m_byteRcv+= data.size();
+			m_statistics[cid].m_byteRcv += data.size();
 			m_statistics[cid].m_byteTriedToSent += data.size();
 		}
 
@@ -92,9 +92,9 @@ public:
 		// critical section
 		{
 			mutex::scoped_lock l(m_mutex);
-			std::cout 
-				<< "client disconnected " 
-				<< std::hex << cid 
+			std::cout
+				<< "client disconnected "
+				<< std::hex << cid
 				<< std::endl;
 		}
 
@@ -111,19 +111,19 @@ public:
 
 				// send final message 1
 				GetIocpServer().Send(
-					cid, 
-					std::vector<uint8_t> (
-						finalMessage1, 
-						finalMessage1+strlen(finalMessage1))
-					);
+					cid,
+					std::vector<uint8_t>(
+						finalMessage1,
+						finalMessage1 + strlen(finalMessage1))
+				);
 
 				// send final message 2
 				GetIocpServer().Send(
-					cid, 
-					std::vector<uint8_t> (
-						finalMessage2, 
-						finalMessage2+strlen(finalMessage2))
-					);
+					cid,
+					std::vector<uint8_t>(
+						finalMessage2,
+						finalMessage2 + strlen(finalMessage2))
+				);
 			}
 
 			// Close the other half of the socket to notify the client
@@ -133,22 +133,22 @@ public:
 			// Finally, fully close the connection.
 			GetIocpServer().Disconnect(cid);
 		}
-		catch (CIocpException const &e)
+		catch(CIocpException const &e)
 		{
 			{
 				mutex::scoped_lock l(m_mutex);
-				std::cout << e.what()<< std::endl;
+				std::cout << e.what() << std::endl;
 			}
 
 			// Something went wrong. The client might have done an abortive
 			// shutdown on the server. So fully disconnect.
 			GetIocpServer().Disconnect(cid);
 		}
-		catch (CWin32Exception const &e)
+		catch(CWin32Exception const &e)
 		{
 			{
 				mutex::scoped_lock l(m_mutex);
-				std::cout << e.what()<< std::endl;
+				std::cout << e.what() << std::endl;
 			}
 
 			// Something went wrong. The client might have done an abortive
@@ -165,15 +165,15 @@ public:
 	{
 		{
 			mutex::scoped_lock l(m_mutex);
-			std::cout 
-				<< "Disconnected " 
-				<< std::hex << cid 
+			std::cout
+				<< "Disconnected "
+				<< std::hex << cid
 				<< std::endl;
 
 			std::cout << std::dec << std::endl;
-			std::cout << "Tried Sent : " << m_statistics[cid].m_byteTriedToSent<< std::endl;
+			std::cout << "Tried Sent : " << m_statistics[cid].m_byteTriedToSent << std::endl;
 			std::cout << "Actually Sent : " << m_statistics[cid].m_byteActuallySent << std::endl;
-			std::cout << "Received : " << m_statistics[cid].m_byteRcv<< std::endl;
+			std::cout << "Received : " << m_statistics[cid].m_byteRcv << std::endl;
 			std::cout << std::dec << std::endl;
 			m_statistics.erase(cid);
 		}

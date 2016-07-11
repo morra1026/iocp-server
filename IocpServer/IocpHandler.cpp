@@ -7,59 +7,60 @@
 #include "IocpHandler.h"
 #include "IocpServer.h"
 
-namespace iocp {
-
-
-void CIocpHandler::OnNewConnection( uint64_t, ConnectionInformation const & )
+namespace iocp
 {
 
-}
 
-void CIocpHandler::OnServerError( int /*errorCode*/ )
-{
-
-}
-
-void CIocpHandler::OnSentData( uint64_t /*cid*/, uint64_t /*byteTransferred*/ )
-{
-
-}
-
-void CIocpHandler::OnReceiveData( uint64_t /*cid*/, std::vector<uint8_t> const &/*data*/ )
-{
-
-}
-
-void iocp::CIocpHandler::OnClientDisconnect( uint64_t cid, int32_t )
-{
-	try
+	void CIocpHandler::OnNewConnection(uint64_t, ConnectionInformation const &)
 	{
-		GetIocpServer().Shutdown(cid, SD_SEND);
 
-		GetIocpServer().Disconnect(cid);
 	}
-	catch (iocp::CWin32Exception const &)
+
+	void CIocpHandler::OnServerError(int /*errorCode*/)
 	{
+
 	}
-	catch (iocp::CIocpException const &)
+
+	void CIocpHandler::OnSentData(uint64_t /*cid*/, uint64_t /*byteTransferred*/)
 	{
+
 	}
-}
 
-void CIocpHandler::OnServerClose( int32_t /*errorCode*/ )
-{
+	void CIocpHandler::OnReceiveData(uint64_t /*cid*/, std::vector<uint8_t> const &/*data*/)
+	{
 
-}
+	}
 
-void CIocpHandler::OnDisconnect( uint64_t /*cid*/, int32_t /*errorcode*/)
-{
+	void iocp::CIocpHandler::OnClientDisconnect(uint64_t cid, int32_t)
+	{
+		try
+		{
+			GetIocpServer().Shutdown(cid, SD_SEND);
 
-}
+			GetIocpServer().Disconnect(cid);
+		}
+		catch(iocp::CWin32Exception const &)
+		{
+		}
+		catch(iocp::CIocpException const &)
+		{
+		}
+	}
+
+	void CIocpHandler::OnServerClose(int32_t /*errorCode*/)
+	{
+
+	}
+
+	void CIocpHandler::OnDisconnect(uint64_t /*cid*/, int32_t /*errorcode*/)
+	{
+
+	}
 
 
-CIocpServer & CIocpHandler::GetIocpServer()
-{
-	return *m_iocpServer;
-}
+	CIocpServer & CIocpHandler::GetIocpServer()
+	{
+		return *m_iocpServer;
+	}
 
 } // end namespace

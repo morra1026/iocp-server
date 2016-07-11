@@ -6,39 +6,55 @@
 #ifndef WORKERTHREAD_H_2010_09_22_22_50_27
 #define WORKERTHREAD_H_2010_09_22_22_50_27
 
-namespace iocp { namespace detail { class CSharedIocpData; } }
-namespace iocp { namespace detail { class CIocpContext; } }
-
-namespace iocp { namespace detail {
-
-class CWorkerThread
+namespace iocp
 {
-public:
+	namespace detail
+	{
+		class CSharedIocpData;
+	}
+}
+namespace iocp
+{
+	namespace detail
+	{
+		class CIocpContext;
+	}
+}
 
-	explicit CWorkerThread(CSharedIocpData &sharedData);
+namespace iocp
+{
+	namespace detail
+	{
 
-	~CWorkerThread();
+		class CWorkerThread
+		{
+		public:
 
-	void Run();
+			explicit CWorkerThread(CSharedIocpData &sharedData);
 
-private:
-	void HandleIocpContext( CIocpContext &iocpContext, DWORD bytesTransferred );
+			~CWorkerThread();
 
-	void HandleCompletionFailure( OVERLAPPED * overlapped, DWORD bytesTransferred, int error );
+			void Run();
 
-	void HandleReceive( CIocpContext &iocpContext, DWORD bytesTransferred );
+		private:
+			void HandleIocpContext(CIocpContext &iocpContext, DWORD bytesTransferred);
 
-	void HandleSend( CIocpContext &iocpContext, DWORD bytesTransferred );
+			void HandleCompletionFailure(OVERLAPPED * overlapped, DWORD bytesTransferred, int error);
 
-	void HandleAccept(CIocpContext &iocpContext, DWORD bytesTransferred );
+			void HandleReceive(CIocpContext &iocpContext, DWORD bytesTransferred);
 
-	void HandleDisconnect(CIocpContext &iocpContext);
-private:
+			void HandleSend(CIocpContext &iocpContext, DWORD bytesTransferred);
 
-	boost::thread m_thread;
+			void HandleAccept(CIocpContext &iocpContext, DWORD bytesTransferred);
 
-	CSharedIocpData &m_iocpData;
-};
+			void HandleDisconnect(CIocpContext &iocpContext);
+		private:
 
-} } // end namespace
+			boost::thread m_thread;
+
+			CSharedIocpData &m_iocpData;
+		};
+
+	}
+} // end namespace
 #endif // WORKERTHREAD_H_2010_09_22_22_50_27

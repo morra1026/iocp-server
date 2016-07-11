@@ -8,42 +8,64 @@
 
 #include "../ConnectionInformation.h"
 
-namespace iocp { namespace detail { class CSharedIocpData; } };
-namespace iocp { namespace detail { class CIocpContext; } };
-namespace iocp { namespace detail { class CConnection; } };
+namespace iocp
+{
+	namespace detail
+	{
+		class CSharedIocpData;
+	}
+};
+namespace iocp
+{
+	namespace detail
+	{
+		class CIocpContext;
+	}
+};
+namespace iocp
+{
+	namespace detail
+	{
+		class CConnection;
+	}
+};
 
-namespace iocp { namespace detail {
+namespace iocp
+{
+	namespace detail
+	{
 
-	int 
-	GetNumIocpThreads();
+		int
+			GetNumIocpThreads();
 
-	SOCKET 
-	CreateOverlappedSocket();
+		SOCKET
+			CreateOverlappedSocket();
 
-	ConnectionInformation 
-	GetConnectionInformation(SOCKET socket);
+		ConnectionInformation
+			GetConnectionInformation(SOCKET socket);
 
-	void 
-	PostAccept(CSharedIocpData &iocpData);
+		void
+			PostAccept(CSharedIocpData &iocpData);
 
-	int 
-	PostRecv( CIocpContext &iocpContext );
+		int
+			PostRecv(CIocpContext &iocpContext);
 
-	int 
-	PostSend(CIocpContext &iocpContext );
+		int
+			PostSend(CIocpContext &iocpContext);
 
-	int 
-	PostDisconnect(CSharedIocpData &iocpData, CConnection &c);
+		int
+			PostDisconnect(CSharedIocpData &iocpData, CConnection &c);
 
-	void 
-	AssociateDevice(HANDLE h, CSharedIocpData &iocpData);
+		void
+			AssociateDevice(HANDLE h, CSharedIocpData &iocpData);
 
-	HANDLE 
-	CreateIocp(int maxConcurrency = 0);
+		HANDLE
+			CreateIocp(int maxConcurrency = 0);
 
-	LPFN_ACCEPTEX
-	LoadAcceptEx(SOCKET s);
+		LPFN_ACCEPTEX
+			LoadAcceptEx(SOCKET s);
 
 
-} } // end namespace
+	}
+} // end namespace
 #endif // UTILS_H_2010_09_28_10_55_30

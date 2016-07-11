@@ -340,9 +340,7 @@ public:
 
 	detail::CSharedIocpData m_iocpData;
 
-	typedef std::vector <
-		shared_ptr<detail::CWorkerThread>
-	> ThreadPool_t;
+	typedef std::vector <shared_ptr<detail::CWorkerThread>> ThreadPool_t;
 
 	ThreadPool_t m_threadPool;
 

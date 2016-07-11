@@ -63,9 +63,9 @@ namespace iocp
 #endif
 
 #ifndef UNICODE
-	#define tcout std::cout
+#define tcout std::cout
 #else
-	#define tcout std::wcout
+#define tcout std::wcout
 #endif
 
 }

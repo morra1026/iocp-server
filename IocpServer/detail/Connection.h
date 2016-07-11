@@ -9,35 +9,39 @@
 #include "IocpContext.h"
 #include "SendQueue.h"
 
-namespace iocp { namespace detail {
-
-class CConnection
+namespace iocp
 {
-public:
+	namespace detail
+	{
 
-	CConnection(SOCKET socket, uint64_t cid, uint32_t rcvBufferSize);
-	~CConnection();
-	bool CloseRcvContext();
+		class CConnection
+		{
+		public:
 
-	shared_ptr<CIocpContext> CreateSendContext();
+			CConnection(SOCKET socket, uint64_t cid, uint32_t rcvBufferSize);
+			~CConnection();
+			bool CloseRcvContext();
 
-	bool HasOutstandingContext();
+			shared_ptr<CIocpContext> CreateSendContext();
 
-	SOCKET m_socket;
-	uint64_t m_id;
+			bool HasOutstandingContext();
 
-	long m_disconnectPending;
-	long m_sendClosePending;
-	long m_rcvClosed;  
+			SOCKET m_socket;
+			uint64_t m_id;
 
-	CIocpContext m_rcvContext;
+			long m_disconnectPending;
+			long m_sendClosePending;
+			long m_rcvClosed;
 
-	CSendQueue m_sendQueue;
+			CIocpContext m_rcvContext;
 
-	CIocpContext m_disconnectContext;
+			CSendQueue m_sendQueue;
 
-	mutex m_connectionMutex;
-};
+			CIocpContext m_disconnectContext;
 
-} } // end namespace
+			mutex m_connectionMutex;
+		};
+
+	}
+} // end namespace
 #endif // CONNECTION_H_2010_09_25_17_15_00
